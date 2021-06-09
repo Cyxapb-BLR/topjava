@@ -19,23 +19,24 @@
 <hr>
 <h2>Meals</h2>
 <table border="1" cellpadding="15" cellspacing="0">
-<tr>
-    <th>Date</th>
-    <th>Description</th>
-    <th>Calories</th>
-    <th></th>
-    <th></th>
-</tr>
-<c:forEach items="${meals}" var="meal">
-    <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
-    <tr class="${meal.excess ? 'excess' : 'normal'}">
-        <td>${meal.dateTime.toString().replace("T", " ")}</td>
-        <td>${meal.description}</td>
-        <td>${meal.calories}</td>
-        <td>Update</td>
-        <td>Delete</td>
+    <tr>
+        <h3><a href="create.html">add Meal</a></h3>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Calories</th>
+        <th></th>
+        <th></th>
     </tr>
-</c:forEach>
+    <c:forEach items="${meals}" var="meal">
+        <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
+        <tr class="${meal.excess ? 'excess' : 'normal'}">
+            <td>${meal.dateTime.toString().replace("T", " ")}</td>
+            <td>${meal.description}</td>
+            <td>${meal.calories}</td>
+            <td><a href="edit.html">Update</a></td>
+            <td><a href="delete.html">Delete</a></td>
+        </tr>
+    </c:forEach>
 </table>
 </body>
 </html>
