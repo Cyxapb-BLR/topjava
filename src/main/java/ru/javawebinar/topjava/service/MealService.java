@@ -1,29 +1,35 @@
 package ru.javawebinar.topjava.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.util.ValidationUtil;
 
 import java.util.Collection;
 
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
+
+@Service
 public class MealService {
 
     private final MealRepository repository;
 
+    @Autowired
     public MealService(MealRepository repository) {
         this.repository = repository;
     }
+
 
     public Meal create(Meal meal, int userId) {
         return repository.save(meal, userId);
     }
 
     public void delete(int mealId, int userId) {
-        ValidationUtil.checkNotFoundWithId(repository.get(mealId, userId), mealId);
+        checkNotFoundWithId(repository.delete(mealId, userId), mealId);
     }
 
     public Meal get(int mealId, int userId) {
-        return ValidationUtil.checkNotFoundWithId(repository.get(mealId, userId), mealId);
+        return checkNotFoundWithId(repository.get(mealId, userId), mealId);
     }
 
     public Collection<Meal> getAll(int userId) {
@@ -31,6 +37,6 @@ public class MealService {
     }
 
     public Meal update(Meal meal, int userId) {
-        return ValidationUtil.checkNotFoundWithId(repository.save(meal, userId), meal.getId());
+        return checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 }
