@@ -63,4 +63,9 @@ public class MealRestController {
         return service.update(meal, userId);
     }
 
+    public Meal get(int id) {
+        int userId = SecurityUtil.authUserId();
+        log.info("get id =  {}, userID = {}", id, userId);
+        return service.get(id, userId);
+    }
 }

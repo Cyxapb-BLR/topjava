@@ -21,7 +21,6 @@ public class MealService {
         this.repository = repository;
     }
 
-
     public Meal create(Meal meal, int userId) {
         return repository.save(meal, userId);
     }

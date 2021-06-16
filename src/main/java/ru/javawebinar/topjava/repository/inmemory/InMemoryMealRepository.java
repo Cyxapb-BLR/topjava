@@ -64,7 +64,7 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getBetween(LocalDateTime start, LocalDateTime end, int userId) {
-        return filteredByPredicate(userId, meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), start.toLocalTime(), end.toLocalTime()));
+            return filteredByPredicate(userId, meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDateTime(), start, end));
     }
 
     private List<Meal> filteredByPredicate(int userId, Predicate<Meal> filter) {
