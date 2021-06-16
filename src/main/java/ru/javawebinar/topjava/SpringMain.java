@@ -22,7 +22,10 @@ public class SpringMain {
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
             adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
-            appCtx.getBean(MealRepository.class).getAll(2).forEach(System.out::println);
+
+            MealRepository mealRepository = appCtx.getBean(MealRepository.class);
+            mealRepository.getAll(1).forEach(System.out::println);
+            mealRepository.getAll(2).forEach(System.out::println);
         }
     }
 }
