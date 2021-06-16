@@ -25,12 +25,6 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public boolean delete(int id) {
-        log.info("delete {}", id);
-        return repository.remove(id) != null;
-    }
-
-    @Override
     public User save(User user) {
         log.info("save {}", user);
         if (user.isNew()) {
@@ -42,6 +36,12 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
+    public boolean delete(int id) {
+        log.info("delete {}", id);
+        return repository.remove(id) != null;
+    }
+
+    @Override
     public User get(int id) {
         log.info("get {}", id);
         return repository.get(id);
@@ -50,13 +50,14 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public List<User> getAll() {
         log.info("getAll");
-        return repository.values().stream().sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
+        return repository.values().stream()
+                .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
                 .collect(Collectors.toList());
     }
 
     @Override
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
-        return repository.values().stream().filter(user -> email.equals(user.getEmail())).findFirst().orElse(null);
+        return repository.values().stream().filter(user -> email.equalsIgnoreCase(user.getEmail())).findFirst().orElse(null);
     }
 }

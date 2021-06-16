@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
@@ -24,9 +25,9 @@ public class MealRestController {
         this.service = service;
     }
 
-    public List<Meal> getAll() {
+    public List<MealTo> getAll() {
         log.info("getAll");
-        return new ArrayList<>(service.getAll(SecurityUtil.authUserId()));
+        return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay());
     }
 
     public Meal create(Meal meal) {
@@ -45,7 +46,8 @@ public class MealRestController {
     public Meal update(Meal meal, int id) {
         int userId = SecurityUtil.authUserId();
         log.info("update {}, userId = {}", meal, userId);
-        assureIdConsistent(meal, userId);
+        assureIdConsistent(meal, id);
         return service.update(meal, userId);
     }
+
 }
