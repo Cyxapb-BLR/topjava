@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +20,7 @@ import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-
+    private MealRestController controller;
     private MealRepository repository;
 
     @Override
@@ -59,6 +61,14 @@ public class MealServlet extends HttpServlet {
                         repository.get(getId(request), SecurityUtil.authUserId());
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
+                break;
+            case "filter":
+                request.setAttribute("meals", controller.getFilteredAll(
+                        DateTimeUtil.parseDate(request.getParameter("fromDate")),
+                        DateTimeUtil.parseDate(request.getParameter("toDate")),
+                        DateTimeUtil.parseTime(request.getParameter("fromTime")),
+                        DateTimeUtil.parseTime(request.getParameter("toTime"))));
+                request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
             case "all":
             default:

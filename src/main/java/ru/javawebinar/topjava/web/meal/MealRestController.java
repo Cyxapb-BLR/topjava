@@ -7,9 +7,12 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
@@ -28,6 +31,16 @@ public class MealRestController {
     public List<MealTo> getAll() {
         log.info("getAll");
         return MealsUtil.getTos(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay());
+    }
+
+    public List<MealTo> getFilteredAll(LocalDate fromDate, LocalDate toDate, LocalTime fromTime, LocalTime toTime) {
+        fromDate = DateTimeUtil.replacingEmptyDate(fromDate, true);
+        toDate = DateTimeUtil.replacingEmptyDate(toDate, false);
+        fromTime = DateTimeUtil.replacingEmptyTime(fromTime, true);
+        toTime = DateTimeUtil.replacingEmptyTime(toTime, false);
+        log.info("get filtered meals from date {} to {}, from time {} to {}", fromDate, toDate, fromTime, toTime);
+        List<Meal> meals = service.getFilteredByDate(fromDate, toDate, SecurityUtil.authUserId());
+        return MealsUtil.getFilteredTos(meals, SecurityUtil.authUserCaloriesPerDay(), fromTime, toTime);
     }
 
     public Meal create(Meal meal) {
