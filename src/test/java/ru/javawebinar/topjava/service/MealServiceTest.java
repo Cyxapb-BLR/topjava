@@ -9,8 +9,18 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.util.Util;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertThrows;
+import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
+import static ru.javawebinar.topjava.util.DateTimeUtil.atStartOfDayOrMin;
+import static ru.javawebinar.topjava.util.DateTimeUtil.atStartOfNextDayOrMax;
 import static ru.javawebinar.topjava.web.MealTestData.*;
 
 @ContextConfiguration({
@@ -35,18 +45,33 @@ public class MealServiceTest {
 
     @Test
     public void delete() {
+        service.delete(TESTED_MEAL_ID, USER_ID);
+        assertThrows(NotFoundException.class, () -> service.get(TESTED_MEAL_ID, USER_ID));
     }
 
     @Test
     public void getBetweenInclusive() {
+        List<Meal> mealList = userMeals.stream()
+                .filter(meal -> Util.isBetweenHalfOpen(meal.getDateTime(), atStartOfDayOrMin(startDate), atStartOfNextDayOrMax(endDate)))
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                .collect(Collectors.toList());
+        System.out.println(mealList);
+        assertMatch(service.getBetweenInclusive(startDate, endDate, USER_ID), mealList);
     }
 
     @Test
     public void getAll() {
+        List<Meal> allForUser = service.getAll(USER_ID);
+        assertMatch(allForUser, userMeals);
+        List<Meal> allForAdmin = service.getAll(ADMIN_ID);
+        assertMatch(allForAdmin, adminMeals);
     }
 
     @Test
     public void update() {
+        Meal updated = getUpdateForUser();
+        service.update(updated, USER_ID);
+        assertMatch(service.get(TESTED_MEAL_ID, USER_ID), updated);
     }
 
     @Test
@@ -57,5 +82,25 @@ public class MealServiceTest {
         newMeal.setId(id);
         assertMatch(createdMeal, newMeal);
         assertMatch(service.get(id, USER_ID), newMeal);
+    }
+
+    @Test
+    public void duplicateDateTimeCreate() {
+
+    }
+
+    @Test
+    public void getStrangerMeal() {
+
+    }
+
+    @Test
+    public void deleteStrangerMeal() {
+
+    }
+
+    @Test
+    public void updateStrangerMeal() {
+
     }
 }
