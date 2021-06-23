@@ -23,6 +23,8 @@ public class MealTestData {
     public static final LocalDate startDate = LocalDate.of(2020, 1, 30);
     public static final LocalDate endDate = LocalDate.of(2020, 1, 31);
 
+    public final static Meal duplicateDateTimeMeal = new Meal(null, LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 700);
+
     public static final Meal userMeal1 = new Meal(TESTED_MEAL_ID, LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500);
     public static final Meal userMeal2 = new Meal(TESTED_MEAL_ID + 1, LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000);
     public static final Meal userMeal3 = new Meal(TESTED_MEAL_ID + 2, LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500);
