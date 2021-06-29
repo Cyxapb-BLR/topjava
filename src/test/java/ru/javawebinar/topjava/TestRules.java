@@ -18,9 +18,9 @@ public class TestRules {
     public static final Stopwatch STOPWATCH = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            String result = String.format("%-100s %7d", description.getDisplayName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+            String result = String.format("%-100s %7d", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
             results.append(result).append("\n");
-            log.info(result + "ms/n");
+            log.info(result + "ms\n");
         }
     };
 
@@ -32,8 +32,8 @@ public class TestRules {
 
         @Override
         protected void after() {
-            log.info("\n\nTest\n" + borderLine +
-                    "\nMethod(Class)                                          "
+            log.info("\n" + borderLine +
+                    "\nTest                                                   "
                     + "                                         Duration, ms\n"
                     + borderLine
                     + results + "\n" + borderLine);
