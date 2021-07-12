@@ -8,11 +8,11 @@ import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
-
 import javax.validation.ConstraintViolationException;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import ru.javawebinar.topjava.repository.JpaUtil;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.UserTestData.*;
@@ -21,10 +21,16 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     protected UserService service;
     @Autowired
     private CacheManager cacheManager;
+
+    @Autowired
+    protected JpaUtil jpaUtil;
+
     @Before
     public void setup() {
         cacheManager.getCache("users").clear();
+        jpaUtil.clear2ndLevelHibernateCache();
     }
+
     @Test
     public void create() {
         User created = service.create(getNew());
@@ -73,7 +79,6 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         List<User> all = service.getAll();
         MATCHER.assertMatch(all, admin, user);
     }
-
     @Test
     public void createWithException() throws Exception {
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.USER)));
