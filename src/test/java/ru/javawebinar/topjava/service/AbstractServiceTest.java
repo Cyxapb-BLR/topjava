@@ -1,4 +1,5 @@
 package ru.javawebinar.topjava.service;
+
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
