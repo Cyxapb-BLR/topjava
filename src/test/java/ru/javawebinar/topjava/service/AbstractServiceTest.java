@@ -50,7 +50,7 @@ public abstract class AbstractServiceTest {
         });
     }
 
-    public boolean isJpaOrDataJpa() {
+    protected boolean isJpaOrDataJpa() {
         return Arrays.stream(environment.getActiveProfiles()).anyMatch(s -> s.equals(Profiles.JPA) || s.equals(Profiles.DATAJPA));
     }
 }
