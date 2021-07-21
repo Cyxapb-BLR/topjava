@@ -2,16 +2,13 @@ package ru.javawebinar.topjava.service;
 
 import org.junit.Assume;
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.repository.JpaUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
@@ -19,10 +16,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import ru.javawebinar.topjava.repository.JpaUtil;
+
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.UserTestData.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Autowired
     protected UserService service;
@@ -85,15 +83,14 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void a1update() {
+    public void update() {
         User updated = getUpdated();
         service.update(updated);
-        //MATCHER.assertMatch(service.get(USER_ID), getUpdated());
-        MATCHER.assertMatch(service.getAll(), admin, getUpdated());
+        MATCHER.assertMatch(service.get(USER_ID), getUpdated());
     }
 
     @Test
-    public void a2getAll() {
+    public void getAll() {
         List<User> all = service.getAll();
         MATCHER.assertMatch(all, admin, user);
     }
